@@ -8,6 +8,7 @@ import com.six.campuseventmanagementsystem.mapper.UserMapper;
 import com.six.campuseventmanagementsystem.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Service
 public class LoginServiceImpl implements LoginService {
@@ -20,7 +21,7 @@ public class LoginServiceImpl implements LoginService {
     private AdminMapper adminMapper;
 
     @Override
-    public boolean verify(String Account,String Password){
+    public boolean verify(String Account, String Password){
         QueryWrapper<User> UqueryWrapper = new QueryWrapper<>();
         QueryWrapper<Admin> AqueryWrapper = new QueryWrapper<>();
         QueryWrapper<SPAdmin> SqueryWrapper = new QueryWrapper<>();

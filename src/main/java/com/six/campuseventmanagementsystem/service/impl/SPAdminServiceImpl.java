@@ -8,6 +8,8 @@ import com.six.campuseventmanagementsystem.service.SPAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class SPAdminServiceImpl implements SPAdminService {
 
@@ -45,6 +47,11 @@ public class SPAdminServiceImpl implements SPAdminService {
     public Boolean DeleteAdmin(String ID) {
         adminMapper.deleteById(ID);
         return true;
+    }
+
+    public List<Admin> SelectAllAdmin(){
+        List<Admin> adminList = adminMapper.selectList(null);
+        return adminList;
     }
 
     @Override
