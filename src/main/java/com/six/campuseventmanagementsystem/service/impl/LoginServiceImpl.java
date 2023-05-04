@@ -6,9 +6,13 @@ import com.six.campuseventmanagementsystem.mapper.AdminMapper;
 import com.six.campuseventmanagementsystem.mapper.SPAdminMapper;
 import com.six.campuseventmanagementsystem.mapper.UserMapper;
 import com.six.campuseventmanagementsystem.service.LoginService;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.Date;
 
 @Service
 public class LoginServiceImpl implements LoginService {
@@ -19,9 +23,13 @@ public class LoginServiceImpl implements LoginService {
     private SPAdminMapper spAdminMapper;
     @Autowired
     private AdminMapper adminMapper;
+    //1天过期
+    private static int expire = 86400;
+    //32位密钥
+    private static String secret = "abcdfghiabcdfghiabcdfghiabcdfghi";
 
     @Override
-    public boolean verify(String Account, String Password){
+    public String verify(String Account, String Password){
         QueryWrapper<User> UqueryWrapper = new QueryWrapper<>();
         QueryWrapper<Admin> AqueryWrapper = new QueryWrapper<>();
         QueryWrapper<SPAdmin> SqueryWrapper = new QueryWrapper<>();
@@ -31,35 +39,213 @@ public class LoginServiceImpl implements LoginService {
         User user = userMapper.selectOne(UqueryWrapper);
         Admin admin = adminMapper.selectOne(AqueryWrapper);
         SPAdmin spAdmin = spAdminMapper.selectOne(SqueryWrapper);
-        if(user != null)
-            return true;
-        else if(admin != null)
-            return true;
+        if(user != null){
+            if(user.getUserType().equals("主办方")){
+                String organizer = "{\n" +
+                        "  \"code\": 20000,\n" +
+                        "  \"data\": {\n" +
+                        "    \"menu\": [\n" +
+                        "      {\n" +
+                        "        \"path\": \"/\",\n" +
+                        "        \"name\": \"home\",\n" +
+                        "        \"label\": \"首页\",\n" +
+                        "        \"icon\": \"s-home\",\n" +
+                        "        \"url\": \"home/index\"\n" +
+                        "      },\n" +
+                        "      {\n" +
+                        "        \"label\": \"赛事管理\",\n" +
+                        "        \"icon\": \"video-play\",\n" +
+                        "        \"path\": \"/match\",\n" +
+                        "        \"children\": [\n" +
+                        "          {\n" +
+                        "            \"path\": \"/activity\",\n" +
+                        "            \"name\": \"activity\",\n" +
+                        "            \"label\": \"赛事活动管理\",\n" +
+                        "            \"icon\": \"setting\",\n" +
+                        "            \"url\": \"match/activity.vue\"\n" +
+                        "          },\n" +
+                        "          {\n" +
+                        "            \"path\": \"/competitor\",\n" +
+                        "            \"name\": \"competitor\",\n" +
+                        "            \"label\": \"赛事选手管理\",\n" +
+                        "            \"icon\": \"setting\",\n" +
+                        "            \"url\": \"match/competitor.vue\"\n" +
+                        "          }\n" +
+                        "        ]\n" +
+                        "      }\n" +
+                        "    ],\n" +
+                        "    \"message\": \"获取成功\"\n" +
+                        "  }\n" +
+                        "}";
+                return organizer;
+            }
+            else if(user.getUserType().equals("赞助商")){
+                String sponsor = "{\n" +
+                        "  \"code\": 20000,\n" +
+                        "  \"data\": {\n" +
+                        "    \"menu\": [\n" +
+                        "      {\n" +
+                        "        \"path\": \"/\",\n" +
+                        "        \"name\": \"home\",\n" +
+                        "        \"label\": \"首页\",\n" +
+                        "        \"icon\": \"s-home\",\n" +
+                        "        \"url\": \"home/index\"\n" +
+                        "      },\n" +
+                        "      {\n" +
+                        "        \"label\": \"赞助管理\",\n" +
+                        "        \"icon\": \"location\",\n" +
+                        "        \"path\": \"/sponsor\",\n" +
+                        "        \"children\": [\n" +
+                        "          {\n" +
+                        "            \"path\": \"/ad\",\n" +
+                        "            \"name\": \"ad\",\n" +
+                        "            \"label\": \"广告信息管理\",\n" +
+                        "            \"icon\": \"setting\",\n" +
+                        "            \"url\": \"sponsor/ad.vue\"\n" +
+                        "          },\n" +
+                        "          {\n" +
+                        "            \"path\": \"/price\",\n" +
+                        "            \"name\": \"price\",\n" +
+                        "            \"label\": \"奖品信息管理\",\n" +
+                        "            \"icon\": \"setting\",\n" +
+                        "            \"url\": \"sponsor/price.vue\"\n" +
+                        "          }\n" +
+                        "        ]\n" +
+                        "      }\n" +
+                        "    ],\n" +
+                        "    \"message\": \"获取成功\"\n" +
+                        "  }\n" +
+                        "}";
+                return sponsor;
+            }
+            else
+                return null;
+        }
+        else if(admin != null){
+            String ad = "{\n" +
+                    "  \"code\": 20000,\n" +
+                    "  \"data\": {\n" +
+                    "    \"menu\": [\n" +
+                    "      {\n" +
+                    "        \"path\": \"/home\",\n" +
+                    "        \"name\": \"home\",\n" +
+                    "        \"label\": \"首页\",\n" +
+                    "        \"icon\": \"s-home\",\n" +
+                    "        \"url\": \"home/index\"\n" +
+                    "      },\n" +
+                    "      {\n" +
+                    "        \"label\": \"赛事管理\",\n" +
+                    "        \"icon\": \"video-play\",\n" +
+                    "        \"path\": \"/match\",\n" +
+                    "        \"children\": [\n" +
+                    "          {\n" +
+                    "            \"path\": \"/activity\",\n" +
+                    "            \"name\": \"activity\",\n" +
+                    "            \"label\": \"赛事活动管理\",\n" +
+                    "            \"icon\": \"setting\",\n" +
+                    "            \"url\": \"match/activity.vue\"\n" +
+                    "          },\n" +
+                    "          {\n" +
+                    "            \"path\": \"/competitor\",\n" +
+                    "            \"name\": \"competitor\",\n" +
+                    "            \"label\": \"赛事选手管理\",\n" +
+                    "            \"icon\": \"setting\",\n" +
+                    "            \"url\": \"match/competitor.vue\"\n" +
+                    "          }\n" +
+                    "        ]\n" +
+                    "      },\n" +
+                    "      {\n" +
+                    "        \"label\": \"用户管理\",\n" +
+                    "        \"icon\": \"user\",\n" +
+                    "        \"path\": \"/user\",\n" +
+                    "        \"children\": [\n" +
+                    "          {\n" +
+                    "            \"path\": \"/account\",\n" +
+                    "            \"name\": \"account\",\n" +
+                    "            \"label\": \"账号管理\",\n" +
+                    "            \"icon\": \"setting\",\n" +
+                    "            \"url\": \"user/account.vue\"\n" +
+                    "          },\n" +
+                    "          {\n" +
+                    "            \"path\": \"/user\",\n" +
+                    "            \"name\": \"user\",\n" +
+                    "            \"label\": \"用户信息管理\",\n" +
+                    "            \"icon\": \"setting\",\n" +
+                    "            \"url\": \"user/user.vue\"\n" +
+                    "          }\n" +
+                    "        ]\n" +
+                    "      },\n" +
+                    "      {\n" +
+                    "        \"label\": \"赞助管理\",\n" +
+                    "        \"icon\": \"location\",\n" +
+                    "        \"path\": \"/sponsor\",\n" +
+                    "        \"children\": [\n" +
+                    "          {\n" +
+                    "            \"path\": \"/ad\",\n" +
+                    "            \"name\": \"ad\",\n" +
+                    "            \"label\": \"广告信息管理\",\n" +
+                    "            \"icon\": \"setting\",\n" +
+                    "            \"url\": \"sponsor/ad.vue\"\n" +
+                    "          },\n" +
+                    "          {\n" +
+                    "            \"path\": \"/price\",\n" +
+                    "            \"name\": \"price\",\n" +
+                    "            \"label\": \"奖品信息管理\",\n" +
+                    "            \"icon\": \"setting\",\n" +
+                    "            \"url\": \"sponsor/price.vue\"\n" +
+                    "          }\n" +
+                    "        ]\n" +
+                    "      }\n" +
+                    "    ],\n" +
+                    "    \"message\": \"获取成功\"\n" +
+                    "  }\n" +
+                    "}";
+            return ad;
+        }
         else if(spAdmin != null)
-            return true;
+            return null;
         else
-            return false;
+            return null;
     }
 
     @Override
-    public boolean sign(String Name, String Account, String Password,String Number,String UserType) {
+    public boolean sign(String Name, String Account, String Password) {
         QueryWrapper<User> UqueryWrapper = new QueryWrapper<>();
-        UqueryWrapper.eq("Account",Account).eq("Password",Password);
+        UqueryWrapper.eq("Account",Account);
         User user = userMapper.selectOne(UqueryWrapper);
         if(user != null){
             return false;
         }
-        else if(UserType.equals("参赛者")||UserType.equals("赞助商")){
+        else{
             User user1 = new User();
             user1.setUserName(Name);
             user1.setAccount(Account);
             user1.setPassword(Password);
-            user1.setNumber(Number);
-            user1.setUserType(UserType);
             userMapper.insert(user1);
             return true;
         }
-        return false;
     }
+    //生成token
+    @Override
+    public String generateToken(String UserType){
+        Date now = new Date();
+        Date expiration = new Date(now.getTime() + 1000 * expire);
+        return Jwts.builder()
+                .setHeaderParam("type","JWT")
+                .setSubject(UserType)
+                .setIssuedAt(now)
+                .setExpiration(expiration)
+                .signWith(SignatureAlgorithm.HS512,secret)
+                .compact();
+    }
+    //解析Token
+    @Override
+    public Claims getClaimsByToken(String token){
+        return Jwts.parser()
+                .setSigningKey(secret)
+                .parseClaimsJws(token)
+                .getBody();
+    }
+
 
 }

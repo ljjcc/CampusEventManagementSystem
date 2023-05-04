@@ -18,6 +18,7 @@ public class SPAdminServiceImpl implements SPAdminService {
     @Autowired
     private SPAdminMapper spAdminMapper;
 
+    //添加管理员
     @Override
     public Boolean InsertAdmin(String AdminName, String Account, String Password, String OldType, String NewType) {
         Admin admin = new Admin();
@@ -30,6 +31,7 @@ public class SPAdminServiceImpl implements SPAdminService {
         return true;
     }
 
+    //更新管理员、更改用户权限
     @Override
     public Boolean UpdateAdmin(Integer ID,String AdminName, String Account, String Password, String OldType, String NewType) {
         Admin admin = new Admin();
@@ -43,17 +45,21 @@ public class SPAdminServiceImpl implements SPAdminService {
         return true;
     }
 
+    //删除管理员
     @Override
     public Boolean DeleteAdmin(String ID) {
         adminMapper.deleteById(ID);
         return true;
     }
 
+    //查询管理员
+    @Override
     public List<Admin> SelectAllAdmin(){
         List<Admin> adminList = adminMapper.selectList(null);
         return adminList;
     }
 
+    //更新超级管理员信息
     @Override
     public Boolean UpdateSPAdmin(Integer ID,String SPAdminName, String Account, String Password, String OldType, String NewType) {
         SPAdmin spadmin = new SPAdmin();

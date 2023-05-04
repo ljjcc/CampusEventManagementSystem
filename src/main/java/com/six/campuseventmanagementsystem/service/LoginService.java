@@ -1,6 +1,13 @@
 package com.six.campuseventmanagementsystem.service;
 
+import io.jsonwebtoken.Claims;
+
+import java.io.File;
+
 public interface LoginService {
-    boolean verify(String Account,String Password);
-    boolean sign(String Name,String Account,String Password,String Number,String UserType);
+    String verify(String Account, String Password);
+    boolean sign(String Name, String Account, String Password);
+    String generateToken(String UserType);
+    public Claims getClaimsByToken(String token);
+
 }
