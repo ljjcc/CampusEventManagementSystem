@@ -16,7 +16,7 @@ public class Admin {
     private String Password;
     @TableField("oldtype")
     private String OldType;
-    @TableField("newtype")
+    @TableField("usertype")
     private String NewType;
 
 

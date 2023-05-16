@@ -1,9 +1,13 @@
 package com.six.campuseventmanagementsystem.service.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.six.campuseventmanagementsystem.entity.Admin;
 import com.six.campuseventmanagementsystem.entity.SPAdmin;
+import com.six.campuseventmanagementsystem.entity.User;
 import com.six.campuseventmanagementsystem.mapper.AdminMapper;
 import com.six.campuseventmanagementsystem.mapper.SPAdminMapper;
+import com.six.campuseventmanagementsystem.mapper.UserMapper;
 import com.six.campuseventmanagementsystem.service.SPAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +21,8 @@ public class SPAdminServiceImpl implements SPAdminService {
     private AdminMapper adminMapper;
     @Autowired
     private SPAdminMapper spAdminMapper;
+    @Autowired
+    private UserMapper userMapper;
 
     //添加管理员
     @Override
@@ -52,11 +58,17 @@ public class SPAdminServiceImpl implements SPAdminService {
         return true;
     }
 
-    //查询管理员
+    //查询所有用户
     @Override
-    public List<Admin> SelectAllAdmin(){
-        List<Admin> adminList = adminMapper.selectList(null);
-        return adminList;
+    public IPage SelectAll(Integer size){
+//        Page<User> userpage = new Page<>(0,size);
+//        Page<Admin> adminpage = new Page<>(0,size);
+//        IPage useripage = userMapper.selectPage(userpage,null);
+//        IPage adminipage = adminMapper.selectPage(adminpage,null);
+//        List<IPage> iPages = null;
+//        iPages.add(useripage);
+//        iPages.add(adminipage);
+        return spAdminMapper.SelectAll(size);
     }
 
     //更新超级管理员信息

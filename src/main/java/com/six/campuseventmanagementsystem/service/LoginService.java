@@ -8,6 +8,6 @@ public interface LoginService {
     String verify(String Account, String Password);
     boolean sign(String Name, String Account, String Password);
     String generateToken(String UserType);
-    public Claims getClaimsByToken(String token);
+    public String getClaimsByToken(String token);
 
 }

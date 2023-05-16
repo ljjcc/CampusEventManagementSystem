@@ -1,5 +1,6 @@
 package com.six.campuseventmanagementsystem.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.six.campuseventmanagementsystem.entity.Admin;
 import com.six.campuseventmanagementsystem.service.SPAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,9 +33,9 @@ public class SPAdminController {
     }
 
     //查询普通管理员
-    @GetMapping("/SelectAdmin")
-    public List<Admin> SelectAllAdmin(){
-        return spAdminService.SelectAllAdmin();
+    @GetMapping("/SelectAll")
+    public IPage SelectAll(Integer size){
+        return spAdminService.SelectAll(size);
     }
 
     //修改超级管理员

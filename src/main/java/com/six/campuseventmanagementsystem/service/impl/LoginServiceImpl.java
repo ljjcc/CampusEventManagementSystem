@@ -41,6 +41,7 @@ public class LoginServiceImpl implements LoginService {
         SPAdmin spAdmin = spAdminMapper.selectOne(SqueryWrapper);
         if(user != null){
             if(user.getUserType().equals("主办方")){
+                generateToken("主办方");
                 String organizer = "{\n" +
                         "  \"code\": 20000,\n" +
                         "  \"data\": {\n" +
@@ -74,6 +75,7 @@ public class LoginServiceImpl implements LoginService {
                         "        ]\n" +
                         "      }\n" +
                         "    ],\n" +
+                        "    \"token\":" +"\""+generateToken("主办方")+"\""+","+
                         "    \"message\": \"获取成功\"\n" +
                         "  }\n" +
                         "}";
@@ -113,6 +115,7 @@ public class LoginServiceImpl implements LoginService {
                         "        ]\n" +
                         "      }\n" +
                         "    ],\n" +
+                        "    \"token\":" +"\""+generateToken("赞助商")+"\""+","+
                         "    \"message\": \"获取成功\"\n" +
                         "  }\n" +
                         "}";
@@ -197,13 +200,94 @@ public class LoginServiceImpl implements LoginService {
                     "        ]\n" +
                     "      }\n" +
                     "    ],\n" +
+                    "    \"token\":" +"\""+generateToken("管理员")+"\""+","+
                     "    \"message\": \"获取成功\"\n" +
                     "  }\n" +
                     "}";
             return ad;
         }
-        else if(spAdmin != null)
-            return null;
+        else if(spAdmin != null) {
+            String spad = "{\n" +
+                    "  \"code\": 20000,\n" +
+                    "  \"data\": {\n" +
+                    "    \"menu\": [\n" +
+                    "      {\n" +
+                    "        \"path\": \"/home\",\n" +
+                    "        \"name\": \"home\",\n" +
+                    "        \"label\": \"首页\",\n" +
+                    "        \"icon\": \"s-home\",\n" +
+                    "        \"url\": \"home/index\"\n" +
+                    "      },\n" +
+                    "      {\n" +
+                    "        \"label\": \"赛事管理\",\n" +
+                    "        \"icon\": \"video-play\",\n" +
+                    "        \"path\": \"/match\",\n" +
+                    "        \"children\": [\n" +
+                    "          {\n" +
+                    "            \"path\": \"/activity\",\n" +
+                    "            \"name\": \"activity\",\n" +
+                    "            \"label\": \"赛事活动管理\",\n" +
+                    "            \"icon\": \"setting\",\n" +
+                    "            \"url\": \"match/activity.vue\"\n" +
+                    "          },\n" +
+                    "          {\n" +
+                    "            \"path\": \"/competitor\",\n" +
+                    "            \"name\": \"competitor\",\n" +
+                    "            \"label\": \"赛事选手管理\",\n" +
+                    "            \"icon\": \"setting\",\n" +
+                    "            \"url\": \"match/competitor.vue\"\n" +
+                    "          }\n" +
+                    "        ]\n" +
+                    "      },\n" +
+                    "      {\n" +
+                    "        \"label\": \"用户管理\",\n" +
+                    "        \"icon\": \"user\",\n" +
+                    "        \"path\": \"/user\",\n" +
+                    "        \"children\": [\n" +
+                    "          {\n" +
+                    "            \"path\": \"/account\",\n" +
+                    "            \"name\": \"account\",\n" +
+                    "            \"label\": \"账号管理\",\n" +
+                    "            \"icon\": \"setting\",\n" +
+                    "            \"url\": \"user/account.vue\"\n" +
+                    "          },\n" +
+                    "          {\n" +
+                    "            \"path\": \"/user\",\n" +
+                    "            \"name\": \"user\",\n" +
+                    "            \"label\": \"用户信息管理\",\n" +
+                    "            \"icon\": \"setting\",\n" +
+                    "            \"url\": \"user/user.vue\"\n" +
+                    "          }\n" +
+                    "        ]\n" +
+                    "      },\n" +
+                    "      {\n" +
+                    "        \"label\": \"赞助管理\",\n" +
+                    "        \"icon\": \"location\",\n" +
+                    "        \"path\": \"/sponsor\",\n" +
+                    "        \"children\": [\n" +
+                    "          {\n" +
+                    "            \"path\": \"/ad\",\n" +
+                    "            \"name\": \"ad\",\n" +
+                    "            \"label\": \"广告信息管理\",\n" +
+                    "            \"icon\": \"setting\",\n" +
+                    "            \"url\": \"sponsor/ad.vue\"\n" +
+                    "          },\n" +
+                    "          {\n" +
+                    "            \"path\": \"/price\",\n" +
+                    "            \"name\": \"price\",\n" +
+                    "            \"label\": \"奖品信息管理\",\n" +
+                    "            \"icon\": \"setting\",\n" +
+                    "            \"url\": \"sponsor/price.vue\"\n" +
+                    "          }\n" +
+                    "        ]\n" +
+                    "      }\n" +
+                    "    ],\n" +
+                    "    \"token\":" +"\""+generateToken("超级管理员")+"\""+","+
+                    "    \"message\": \"获取成功\"\n" +
+                    "  }\n" +
+                    "}";
+            return spad;
+        }
         else
             return null;
     }
@@ -240,11 +324,11 @@ public class LoginServiceImpl implements LoginService {
     }
     //解析Token
     @Override
-    public Claims getClaimsByToken(String token){
+    public String getClaimsByToken(String token){
         return Jwts.parser()
                 .setSigningKey(secret)
                 .parseClaimsJws(token)
-                .getBody();
+                .getBody().getSubject();
     }
 
 

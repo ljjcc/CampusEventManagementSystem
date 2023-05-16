@@ -33,7 +33,7 @@ public class LoginController {
         return loginService.generateToken(UserType);
     }
     @PostMapping("/parse")
-    public Claims getClaimsByToken(String token){
+    public String getClaimsByToken(String token){
         return loginService.getClaimsByToken(token);
     }
     @RequestMapping("/test")
