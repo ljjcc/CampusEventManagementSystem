@@ -17,7 +17,10 @@ public class Admin {
     @TableField("oldtype")
     private String OldType;
     @TableField("usertype")
-    private String NewType;
+    private String UserType;
+
+    @TableField("state")
+    private String State;
 
 
 
@@ -61,12 +64,20 @@ public class Admin {
         OldType = oldType;
     }
 
-    public String getNewType() {
-        return NewType;
+    public String getUserType() {
+        return UserType;
     }
 
-    public void setNewType(String newType) {
-        NewType = newType;
+    public void setUserType(String userType) {
+        UserType = userType;
+    }
+
+    public String getState() {
+        return State;
+    }
+
+    public void setState(String state) {
+        State = state;
     }
 
     @Override
@@ -77,7 +88,7 @@ public class Admin {
                 ", Account='" + Account + '\'' +
                 ", Password='" + Password + '\'' +
                 ", OldType='" + OldType + '\'' +
-                ", NewType='" + NewType + '\'' +
+                ", NewType='" + UserType + '\'' +
                 '}';
     }
 }

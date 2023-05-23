@@ -9,6 +9,6 @@ import org.apache.ibatis.annotations.Select;
 
 @Mapper
 public interface SPAdminMapper extends BaseMapper<SPAdmin> {
-    @Select("select UserName,Account,State,UserType,Number from tb_user union all select AdminName,Account,State,UserType,Number from tb_admin limit 0,#{size}")
-    public IPage SelectAll(int size);
+//    @Select("select UserName,Account,State,UserType,Number from tb_user union all select AdminName,Account,State,UserType,Number from tb_admin limit 0,#{size}")
+//    public IPage SelectAll(int size);
 }

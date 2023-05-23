@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/SPAdmin")
 public class SPAdminController {
     @Autowired
@@ -28,16 +29,38 @@ public class SPAdminController {
 
     //删除普通管理员
     @DeleteMapping("/DeleteAdmin")
-    public Boolean DeleteAdmin(String ID){
+    public Boolean DeleteAdmin(Integer ID){
         return spAdminService.DeleteAdmin(ID);
     }
 
-    //查询普通管理员
-    @GetMapping("/SelectAll")
-    public IPage SelectAll(Integer size){
-        return spAdminService.SelectAll(size);
+    //注销用户,到时还需添加发送通知功能
+    @PutMapping("/Logout")
+    public Boolean Logout(Integer ID, String UserType){
+        return spAdminService.Logout(ID, UserType);
     }
 
+    //启用用户
+    @PutMapping("/Enable")
+    public Boolean Enable(Integer ID, String Usertype){
+        return spAdminService.Enable(ID, Usertype);
+    }
+    //查询普通管理员
+    @PostMapping("/SelectAdmin")
+    public IPage SelectAdmin(Integer page, Integer size, String token){
+        return spAdminService.SelectAdmin(page,size,token);
+    }
+
+    //查询普通用户
+    @PostMapping("/SelectUser")
+    public IPage SelectUser(Integer page, Integer size, String token){
+        return spAdminService.SelectUser(page,size,token);
+    }
+
+    //查询赛事选手
+    @PostMapping("/SelectPlayer")
+    public IPage SelectPlayer(Integer page, Integer size, String token){
+        return spAdminService.SelectPlayer(page,size,token);
+    }
     //修改超级管理员
     @PutMapping("UpdateSPAdmin")
     public Boolean UpdateSPAdmin(Integer ID,String SPAdminName,String Account,String Password,String OldType,String NewType){

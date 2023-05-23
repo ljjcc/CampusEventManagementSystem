@@ -21,6 +21,7 @@ public class User {
     private String Origin;
     @TableField("usertype")
     private String UserType;
+    private String State;
 
 //    public String getToken() {
 //        return Token;
@@ -114,6 +115,14 @@ public class User {
 
     public String getUserType() {
         return UserType;
+    }
+
+    public String getState() {
+        return State;
+    }
+
+    public void setState(String state) {
+        State = state;
     }
 
     public void setUserType(String userType) {
