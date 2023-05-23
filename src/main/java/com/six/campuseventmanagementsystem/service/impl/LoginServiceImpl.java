@@ -39,7 +39,7 @@ public class LoginServiceImpl implements LoginService {
         User user = userMapper.selectOne(UqueryWrapper);
         Admin admin = adminMapper.selectOne(AqueryWrapper);
         SPAdmin spAdmin = spAdminMapper.selectOne(SqueryWrapper);
-        if(user != null){
+        if(user != null&&user.getUserType().equals("启用")){
             if(user.getUserType().equals("主办方")){
                 generateToken("主办方");
                 String organizer = "{\n" +
@@ -124,7 +124,7 @@ public class LoginServiceImpl implements LoginService {
             else
                 return null;
         }
-        else if(admin != null){
+        else if(admin != null&&admin.getUserType().equals("启用")){
             String ad = "{\n" +
                     "  \"code\": 20000,\n" +
                     "  \"data\": {\n" +
@@ -287,6 +287,12 @@ public class LoginServiceImpl implements LoginService {
                     "  }\n" +
                     "}";
             return spad;
+        }
+        else if(admin.getUserType().equals("未启用")){
+            return null;
+        }
+        else if(user.getUserType().equals("未启用")){
+            return null;
         }
         else
             return null;
