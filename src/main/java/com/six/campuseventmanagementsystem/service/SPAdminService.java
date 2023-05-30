@@ -7,19 +7,19 @@ import java.util.List;
 
 public interface SPAdminService {
     //添加管理员
-    Boolean InsertAdmin(String AdminName,String Account,String Password,String OldType,String NewType);
+    Boolean InsertAdmin(String AdminName,String Account,String Password, String NewType);
     //修改管理员
-    Boolean UpdateAdmin(Integer ID,String AdminName,String Account,String Password,String OldType,String NewType);
+    Boolean UpdateAdmin(Integer ID,String AdminName,String Account,String Password, String NewType);
     //删除管理员
     Boolean DeleteAdmin(Integer ID);
     //注销管理员
     Boolean LogoutAdmin(Integer ID);
     //注销普通用户
-    Boolean LogoutUser(Integer ID);
+    Boolean LogoutUser(Integer ID, String UserType);
     //启用管理员
     public Boolean EnableAdmin(Integer ID);
     //启用普通用户
-    public Boolean EnableUser(Integer ID);
+    public Boolean EnableUser(Integer ID, String UserType);
     //注销
     Boolean Logout(Integer ID, String UserType);
     //启用

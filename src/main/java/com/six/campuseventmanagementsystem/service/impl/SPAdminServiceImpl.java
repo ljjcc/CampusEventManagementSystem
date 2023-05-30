@@ -1,5 +1,6 @@
 package com.six.campuseventmanagementsystem.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.six.campuseventmanagementsystem.entity.Admin;
@@ -28,27 +29,25 @@ public class SPAdminServiceImpl implements SPAdminService {
 
     //添加管理员
     @Override
-    public Boolean InsertAdmin(String AdminName, String Account, String Password, String OldType, String NewType) {
+    public Boolean InsertAdmin(String AdminName, String Account, String Password, String UserType) {
         Admin admin = new Admin();
         admin.setAdminName(AdminName);
         admin.setAccount(Account);
         admin.setPassword(Password);
-        admin.setOldType(OldType);
-        admin.setUserType(NewType);
+        admin.setUserType(UserType);
         adminMapper.insert(admin);
         return true;
     }
 
-    //更新管理员、更改用户权限
+    //授权管理员
     @Override
-    public Boolean UpdateAdmin(Integer ID,String AdminName, String Account, String Password, String OldType, String NewType) {
+    public Boolean UpdateAdmin(Integer ID,String AdminName, String Account, String Password, String UserType) {
         Admin admin = new Admin();
         admin.setID(ID);
         admin.setAdminName(AdminName);
         admin.setAccount(Account);
         admin.setPassword(Password);
-        admin.setOldType(OldType);
-        admin.setUserType(NewType);
+        admin.setUserType(UserType);
         adminMapper.updateById(admin);
         return true;
     }
@@ -63,41 +62,61 @@ public class SPAdminServiceImpl implements SPAdminService {
     //注销管理员
     @Override
     public Boolean LogoutAdmin(Integer ID){
-        Admin admin = new Admin();
-        admin.setID(ID);
-        admin.setState("未启用");
-        adminMapper.updateById(admin);
-        return true;
+        QueryWrapper<Admin> AqueryWrapper = new QueryWrapper<>();
+        AqueryWrapper.eq("id",ID);
+        if(adminMapper.selectOne(AqueryWrapper) != null){
+            Admin admin = new Admin();
+            admin.setID(ID);
+            admin.setState("未启用");
+            adminMapper.updateById(admin);
+            return true;
+        }else
+            return false;
     }
 
     //注销普通用户
     @Override
-    public Boolean LogoutUser(Integer ID){
-        User user = new User();
-        user.setID(ID);
-        user.setState("未启用");
-        userMapper.updateById(user);
-        return true;
+    public Boolean LogoutUser(Integer ID, String UserType){
+        QueryWrapper<User> UqueryWrapper = new QueryWrapper<>();
+        UqueryWrapper.eq("id",ID).eq("UserType",UserType);
+        if(userMapper.selectOne(UqueryWrapper) != null) {
+            User user = new User();
+            user.setID(ID);
+            user.setState("未启用");
+            userMapper.updateById(user);
+            return true;
+        }else
+            return false;
     }
 
     //启用管理员
     @Override
     public Boolean EnableAdmin(Integer ID){
-        Admin admin = new Admin();
-        admin.setID(ID);
-        admin.setState("启用");
-        adminMapper.updateById(admin);
-        return true;
+        QueryWrapper<Admin> AqueryWrapper = new QueryWrapper<>();
+        AqueryWrapper.eq("id",ID);
+        if(adminMapper.selectOne(AqueryWrapper) != null) {
+            Admin admin = new Admin();
+            admin.setID(ID);
+            admin.setState("启用");
+            adminMapper.updateById(admin);
+            return true;
+        }else
+            return false;
     }
 
     //启用普通用户
     @Override
-    public Boolean EnableUser(Integer ID){
-        User user = new User();
-        user.setID(ID);
-        user.setState("启用");
-        userMapper.updateById(user);
-        return true;
+    public Boolean EnableUser(Integer ID,String UserType){
+        QueryWrapper<User> UqueryWrapper = new QueryWrapper<>();
+        UqueryWrapper.eq("id",ID).eq("UserType",UserType);
+        if(userMapper.selectOne(UqueryWrapper) != null) {
+            User user = new User();
+            user.setID(ID);
+            user.setState("启用");
+            userMapper.updateById(user);
+            return true;
+        }else
+            return false;
     }
 
     //注销
@@ -107,7 +126,7 @@ public class SPAdminServiceImpl implements SPAdminService {
             return LogoutAdmin(ID);
         }
         else if(UserType.equals("主办方")||UserType.equals("赞助商")){
-            return LogoutUser(ID);
+            return LogoutUser(ID, UserType);
         }else
             return false;
     }
@@ -119,7 +138,7 @@ public class SPAdminServiceImpl implements SPAdminService {
             return EnableAdmin(ID);
         }
         else if(UserType.equals("主办方")||UserType.equals("赞助商")){
-            return EnableUser(ID);
+            return EnableUser(ID, UserType);
         }else
             return false;
     }

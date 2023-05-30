@@ -4,33 +4,36 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import org.joda.time.DateTime;
+
 
 @TableName("tb_admin")
 public class Admin {
 
-    @TableId(type = IdType.AUTO)
-    private Integer id;
     @TableField("adminname")
     private String AdminName;
-    private String Account;
-    private String Password;
-    @TableField("oldtype")
-    private String OldType;
+    private String Sex;
+    private String Nation;
+    private DateTime Birthday;
+    @TableField("documenttype")
+    private String DocumentType;
+    @TableField("documentnumber")
+    private String DocumentNumber;
+    @TableField("maddress")
+    private String MAddress;
+    @TableId(type = IdType.AUTO)
+    private Integer id;
+    private String Unit;
+    private String Address;
+    private String Age;
+    private String Number;
+    private String Origin;
     @TableField("usertype")
     private String UserType;
-
+    private String Account;
+    private String Password;
     @TableField("state")
     private String State;
-
-
-
-    public Integer getID() {
-        return id;
-    }
-
-    public void setID(Integer ID) {
-        this.id = ID;
-    }
 
     public String getAdminName() {
         return AdminName;
@@ -38,6 +41,110 @@ public class Admin {
 
     public void setAdminName(String adminName) {
         AdminName = adminName;
+    }
+
+    public String getSex() {
+        return Sex;
+    }
+
+    public void setSex(String sex) {
+        Sex = sex;
+    }
+
+    public String getNation() {
+        return Nation;
+    }
+
+    public void setNation(String nation) {
+        Nation = nation;
+    }
+
+    public DateTime getBirthday() {
+        return Birthday;
+    }
+
+    public void setBirthday(DateTime birthday) {
+        Birthday = birthday;
+    }
+
+    public String getDocumentType() {
+        return DocumentType;
+    }
+
+    public void setDocumentType(String documentType) {
+        DocumentType = documentType;
+    }
+
+    public String getDocumentNumber() {
+        return DocumentNumber;
+    }
+
+    public void setDocumentNumber(String documentNumber) {
+        DocumentNumber = documentNumber;
+    }
+
+    public String getMAddress() {
+        return MAddress;
+    }
+
+    public void setMAddress(String MAddress) {
+        this.MAddress = MAddress;
+    }
+
+    public Integer getID() {
+        return id;
+    }
+
+    public void setID(Integer id) {
+        this.id = id;
+    }
+
+    public String getUnit() {
+        return Unit;
+    }
+
+    public void setUnit(String unit) {
+        Unit = unit;
+    }
+
+    public String getAddress() {
+        return Address;
+    }
+
+    public void setAddress(String address) {
+        Address = address;
+    }
+
+    public String getAge() {
+        return Age;
+    }
+
+    public void setAge(String age) {
+        Age = age;
+    }
+
+    public String getNumber() {
+        return Number;
+    }
+
+    public void setNumber(String number) {
+        Number = number;
+    }
+
+    public String getOrigin() {
+        return Origin;
+    }
+
+    public void setOrigin(String origin) {
+        Origin = origin;
+    }
+
+    public String getUserType() {
+        return UserType;
+    }
+
+    public void setUserType(String userType) {
+        UserType = userType;
     }
 
     public String getAccount() {
@@ -56,22 +163,6 @@ public class Admin {
         Password = password;
     }
 
-    public String getOldType() {
-        return OldType;
-    }
-
-    public void setOldType(String oldType) {
-        OldType = oldType;
-    }
-
-    public String getUserType() {
-        return UserType;
-    }
-
-    public void setUserType(String userType) {
-        UserType = userType;
-    }
-
     public String getState() {
         return State;
     }
@@ -83,12 +174,18 @@ public class Admin {
     @Override
     public String toString() {
         return "Admin{" +
-                "ID=" + id +
-                ", AdminName='" + AdminName + '\'' +
+                "AdminName='" + AdminName + '\'' +
+                ", Sex='" + Sex + '\'' +
+                ", id=" + id +
+                ", Unit='" + Unit + '\'' +
+                ", Address='" + Address + '\'' +
+                ", Age='" + Age + '\'' +
+                ", Number='" + Number + '\'' +
+                ", Origin='" + Origin + '\'' +
+                ", UserType='" + UserType + '\'' +
                 ", Account='" + Account + '\'' +
                 ", Password='" + Password + '\'' +
-                ", OldType='" + OldType + '\'' +
-                ", NewType='" + UserType + '\'' +
+                ", State='" + State + '\'' +
                 '}';
     }
 }

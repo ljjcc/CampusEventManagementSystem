@@ -17,14 +17,14 @@ public class SPAdminController {
 
     //新建普通管理员
     @PostMapping("/add")
-    public Boolean InsertAdmin(String AdminName,String Account,String Password,String OldType,String NewType){
-        return spAdminService.InsertAdmin(AdminName, Account, Password, OldType, NewType);
+    public Boolean InsertAdmin(String AdminName,String Account,String Password,String NewType){
+        return spAdminService.InsertAdmin(AdminName, Account, Password, NewType);
     }
 
     //修改普通管理员
     @PutMapping("/UpdateAdmin")
-    public Boolean UpdateAdmin(Integer ID,String AdminName,String Account,String Password,String OldType,String NewType){
-        return spAdminService.UpdateAdmin(ID, AdminName, Account, Password, OldType, NewType);
+    public Boolean UpdateAdmin(Integer ID,String AdminName,String Account,String Password,String NewType){
+        return spAdminService.UpdateAdmin(ID, AdminName, Account, Password, NewType);
     }
 
     //删除普通管理员
@@ -41,8 +41,8 @@ public class SPAdminController {
 
     //启用用户
     @PutMapping("/Enable")
-    public Boolean Enable(Integer ID, String Usertype){
-        return spAdminService.Enable(ID, Usertype);
+    public Boolean Enable(Integer ID, String UserType){
+        return spAdminService.Enable(ID, UserType);
     }
     //查询普通管理员
     @PostMapping("/SelectAdmin")

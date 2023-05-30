@@ -4,12 +4,25 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import net.sf.jsqlparser.expression.DateTimeLiteralExpression;
+import org.joda.time.DateTime;
+import sun.security.util.Password;
+
+import java.sql.Date;
 
 @TableName("tb_user")
 public class User {
     @TableField("username")
     private String UserName;
     private String Sex;
+    private String Nation;
+    private String Birthday;
+    @TableField("documenttype")
+    private String DocumentType;
+    @TableField("documentnumber")
+    private String DocumentNumber;
+    @TableField("maddress")
+    private String MAddress;
     @TableId(type = IdType.AUTO)
     private Integer id;
     private String Unit;
@@ -33,6 +46,26 @@ public class User {
 
 //    private String Token;
 
+
+    public User() {
+    }
+
+    public User(String Password, String Account, String userName, String sex, String nation, String birthday, String documentType, String documentNumber, String MAddress, String unit, String number, String origin, String userType) {
+        UserName = userName;
+        Sex = sex;
+        Nation = nation;
+        Birthday = birthday;
+        DocumentType = documentType;
+        DocumentNumber = documentNumber;
+        this.MAddress = MAddress;
+        this.Account = Account;
+        this.Password = Password;
+        Unit = unit;
+        Number = number;
+        Origin = origin;
+        UserType = userType;
+    }
+
     public String getUserName() {
         return UserName;
     }
@@ -47,6 +80,46 @@ public class User {
 
     public void setSex(String sex) {
         Sex = sex;
+    }
+
+    public String getNation() {
+        return Nation;
+    }
+
+    public void setNation(String nation) {
+        Nation = nation;
+    }
+
+    public String getBirthday() {
+        return Birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        Birthday = birthday;
+    }
+
+    public String getDocumentType() {
+        return DocumentType;
+    }
+
+    public void setDocumentType(String documentType) {
+        DocumentType = documentType;
+    }
+
+    public String getDocumentNumber() {
+        return DocumentNumber;
+    }
+
+    public void setDocumentNumber(String documentNumber) {
+        DocumentNumber = documentNumber;
+    }
+
+    public String getMAddress() {
+        return MAddress;
+    }
+
+    public void setMAddress(String MAddress) {
+        this.MAddress = MAddress;
     }
 
     public Integer getID() {

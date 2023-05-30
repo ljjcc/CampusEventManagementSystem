@@ -5,8 +5,8 @@ import com.six.campuseventmanagementsystem.entity.*;
 import com.six.campuseventmanagementsystem.mapper.AdminMapper;
 import com.six.campuseventmanagementsystem.mapper.SPAdminMapper;
 import com.six.campuseventmanagementsystem.mapper.UserMapper;
+import com.six.campuseventmanagementsystem.mapper.VisitorMapper;
 import com.six.campuseventmanagementsystem.service.LoginService;
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +23,8 @@ public class LoginServiceImpl implements LoginService {
     private SPAdminMapper spAdminMapper;
     @Autowired
     private AdminMapper adminMapper;
+    @Autowired
+    private VisitorMapper visitorMapper;
     //1天过期
     private static int expire = 86400;
     //32位密钥
@@ -33,12 +35,15 @@ public class LoginServiceImpl implements LoginService {
         QueryWrapper<User> UqueryWrapper = new QueryWrapper<>();
         QueryWrapper<Admin> AqueryWrapper = new QueryWrapper<>();
         QueryWrapper<SPAdmin> SqueryWrapper = new QueryWrapper<>();
+        QueryWrapper<Visitor> VqueryWrapper = new QueryWrapper<>();
         UqueryWrapper.eq("Account",Account).eq("Password",Password);
         AqueryWrapper.eq("Account",Account).eq("Password",Password);
         SqueryWrapper.eq("Account",Account).eq("Password",Password);
+        VqueryWrapper.eq("Account", Account).eq("Password", Password);
         User user = userMapper.selectOne(UqueryWrapper);
         Admin admin = adminMapper.selectOne(AqueryWrapper);
         SPAdmin spAdmin = spAdminMapper.selectOne(SqueryWrapper);
+        Visitor visitor = visitorMapper.selectOne(VqueryWrapper);
         if(user != null&&user.getUserType().equals("启用")){
             if(user.getUserType().equals("主办方")){
                 generateToken("主办方");
@@ -206,6 +211,46 @@ public class LoginServiceImpl implements LoginService {
                     "}";
             return ad;
         }
+        else if(visitor != null){
+            String organizer = "{\n" +
+                    "  \"code\": 20000,\n" +
+                    "  \"data\": {\n" +
+                    "    \"menu\": [\n" +
+                    "      {\n" +
+                    "        \"path\": \"/\",\n" +
+                    "        \"name\": \"home\",\n" +
+                    "        \"label\": \"首页\",\n" +
+                    "        \"icon\": \"s-home\",\n" +
+                    "        \"url\": \"home/index\"\n" +
+                    "      },\n" +
+                    "      {\n" +
+                    "        \"label\": \"赛事管理\",\n" +
+                    "        \"icon\": \"video-play\",\n" +
+                    "        \"path\": \"/match\",\n" +
+                    "        \"children\": [\n" +
+                    "          {\n" +
+                    "            \"path\": \"/activity\",\n" +
+                    "            \"name\": \"activity\",\n" +
+                    "            \"label\": \"赛事活动管理\",\n" +
+                    "            \"icon\": \"setting\",\n" +
+                    "            \"url\": \"match/activity.vue\"\n" +
+                    "          },\n" +
+                    "          {\n" +
+                    "            \"path\": \"/competitor\",\n" +
+                    "            \"name\": \"competitor\",\n" +
+                    "            \"label\": \"赛事选手管理\",\n" +
+                    "            \"icon\": \"setting\",\n" +
+                    "            \"url\": \"match/competitor.vue\"\n" +
+                    "          }\n" +
+                    "        ]\n" +
+                    "      }\n" +
+                    "    ],\n" +
+                    "    \"token\":" +"\""+generateToken("游客")+"\""+","+
+                    "    \"message\": \"获取成功\"\n" +
+                    "  }\n" +
+                    "}";
+            return organizer;
+        }
         else if(spAdmin != null) {
             String spad = "{\n" +
                     "  \"code\": 20000,\n" +
@@ -288,30 +333,33 @@ public class LoginServiceImpl implements LoginService {
                     "}";
             return spad;
         }
-        else if(admin.getUserType().equals("未启用")){
-            return null;
-        }
-        else if(user.getUserType().equals("未启用")){
-            return null;
-        }
         else
             return null;
     }
 
     @Override
     public boolean sign(String Name, String Account, String Password) {
+        QueryWrapper<Visitor> VqueryWrapper = new QueryWrapper<>();
         QueryWrapper<User> UqueryWrapper = new QueryWrapper<>();
+        QueryWrapper<Admin> AqueryWrapper = new QueryWrapper<>();
+        QueryWrapper<SPAdmin> SqueryWrapper = new QueryWrapper<>();
         UqueryWrapper.eq("Account",Account);
+        AqueryWrapper.eq("Account",Account);
+        SqueryWrapper.eq("Account",Account);
+        VqueryWrapper.eq("Account",Account);
         User user = userMapper.selectOne(UqueryWrapper);
-        if(user != null){
+        Admin admin = adminMapper.selectOne(AqueryWrapper);
+        SPAdmin spAdmin = spAdminMapper.selectOne(SqueryWrapper);
+        Visitor visitor = visitorMapper.selectOne(VqueryWrapper);
+        if(visitor != null||user != null||admin != null||spAdmin != null){
             return false;
         }
         else{
-            User user1 = new User();
-            user1.setUserName(Name);
-            user1.setAccount(Account);
-            user1.setPassword(Password);
-            userMapper.insert(user1);
+            Visitor visitor1 = new Visitor();
+            visitor1.setUserName(Name);
+            visitor1.setAccount(Account);
+            visitor1.setPassword(Password);
+            visitorMapper.insert(visitor1);
             return true;
         }
     }

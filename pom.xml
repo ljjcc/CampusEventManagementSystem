@@ -93,6 +93,12 @@
             <artifactId>spring-boot-devtools</artifactId>
             <optional>true</optional>
         </dependency>
+<!--获取时间数据类型-->
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>2.9.8</version>
+        </dependency>
 <!--springframework 5.x.x版-->
 <!--        <dependency>-->
 <!--            <groupId>org.springframework</groupId>-->
