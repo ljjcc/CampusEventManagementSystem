@@ -14,13 +14,29 @@ public class Vetting {
     private String Message;
     private String Time;
     private String Sendto;
+    private String Account;
+    @TableField("Matchid")
+    private Integer Matchid;
     private String State;
 
-    public Vetting(String type, String message, String time, String sendto) {
+    public Vetting(String type, String message, String time, String sendto, String account) {
         Type = type;
         Message = message;
         Time = time;
         Sendto = sendto;
+        Account = account;
+    }
+
+    public Vetting(String type, String message, String time, String sendto, String account, Integer matchid) {
+        Type = type;
+        Message = message;
+        Time = time;
+        Sendto = sendto;
+        Account = account;
+        Matchid = matchid;
+    }
+
+    public Vetting() {
     }
 
     public Integer getId() {
@@ -63,6 +79,21 @@ public class Vetting {
         Sendto = sendto;
     }
 
+    public String getAccount() {
+        return Account;
+    }
+
+    public void setAccount(String account) {
+        Account = account;
+    }
+
+    public Integer getMatchid() {
+        return Matchid;
+    }
+
+    public void setMatchid(Integer matchid) {
+        Matchid = matchid;
+    }
 
     public String getState() {
         return State;

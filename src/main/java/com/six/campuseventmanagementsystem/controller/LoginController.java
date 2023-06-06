@@ -9,7 +9,7 @@ import java.io.File;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/login")
+@RequestMapping("/CEMS/login")
 public class LoginController {
 
     @Autowired

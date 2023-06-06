@@ -44,7 +44,7 @@ public class LoginServiceImpl implements LoginService {
         Admin admin = adminMapper.selectOne(AqueryWrapper);
         SPAdmin spAdmin = spAdminMapper.selectOne(SqueryWrapper);
         Visitor visitor = visitorMapper.selectOne(VqueryWrapper);
-        if(user != null&&user.getUserType().equals("启用")){
+        if(user != null&&user.getUserType().equals("Y")){
             if(user.getUserType().equals("主办方")){
                 generateToken("主办方");
                 String organizer = "{\n" +
@@ -129,7 +129,7 @@ public class LoginServiceImpl implements LoginService {
             else
                 return null;
         }
-        else if(admin != null&&admin.getUserType().equals("启用")){
+        else if(admin != null&&admin.getUserType().equals("Y")){
             String ad = "{\n" +
                     "  \"code\": 20000,\n" +
                     "  \"data\": {\n" +

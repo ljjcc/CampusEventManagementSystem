@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/SPAdmin")
+@RequestMapping("/CEMS/SPAdmin")
 public class SPAdminController {
     @Autowired
     private SPAdminService spAdminService;

@@ -50,7 +50,9 @@ public class User {
     public User() {
     }
 
-    public User(String Password, String Account, String userName, String sex, String nation, String birthday, String documentType, String documentNumber, String MAddress, String unit, String number, String origin, String userType) {
+    public User(String Password, String Account, String userName, String sex, String nation,
+                String birthday, String documentType, String documentNumber, String MAddress, String unit,
+                String number, String origin, String userType) {
         UserName = userName;
         Sex = sex;
         Nation = nation;

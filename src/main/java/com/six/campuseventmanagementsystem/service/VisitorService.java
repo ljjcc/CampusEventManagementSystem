@@ -7,7 +7,10 @@ import org.joda.time.DateTime;
 import java.sql.Date;
 
 public interface VisitorService {
-    //实名验证，申请成为 主办方or赞助商
-    Boolean Submit(String Password, String Account, String UserName, String Sex, String Nation, String birthday, String DocumentType, String DocumentNumber, String Unit, String Number, String Origin, String MAddress, String UserType);
-    String RealName(String UserName, String Sex, String Nation, String birthday, String DocumentType, String DocumentNumber, String Unit, String Number, String Origin, String MAddress, String UserType);
+    /**
+     * 根据User的 实名验证数据 发送主办方or赞助商的申请
+     * @return 返回更改记录数
+     */
+    Integer Submit(String Password, String Account, String UserName, String Sex, String Nation, String birthday, String DocumentType, String DocumentNumber, String Unit, String Number, String Origin, String MAddress, String UserType);
+//    String RealName(String UserName, String Sex, String Nation, String birthday, String DocumentType, String DocumentNumber, String Unit, String Number, String Origin, String MAddress, String UserType);
 }

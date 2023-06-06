@@ -67,7 +67,7 @@ public class SPAdminServiceImpl implements SPAdminService {
         if(adminMapper.selectOne(AqueryWrapper) != null){
             Admin admin = new Admin();
             admin.setID(ID);
-            admin.setState("未启用");
+            admin.setState("N");
             adminMapper.updateById(admin);
             return true;
         }else
@@ -82,7 +82,7 @@ public class SPAdminServiceImpl implements SPAdminService {
         if(userMapper.selectOne(UqueryWrapper) != null) {
             User user = new User();
             user.setID(ID);
-            user.setState("未启用");
+            user.setState("N");
             userMapper.updateById(user);
             return true;
         }else
@@ -97,7 +97,7 @@ public class SPAdminServiceImpl implements SPAdminService {
         if(adminMapper.selectOne(AqueryWrapper) != null) {
             Admin admin = new Admin();
             admin.setID(ID);
-            admin.setState("启用");
+            admin.setState("Y");
             adminMapper.updateById(admin);
             return true;
         }else
@@ -112,7 +112,7 @@ public class SPAdminServiceImpl implements SPAdminService {
         if(userMapper.selectOne(UqueryWrapper) != null) {
             User user = new User();
             user.setID(ID);
-            user.setState("启用");
+            user.setState("Y");
             userMapper.updateById(user);
             return true;
         }else
@@ -146,7 +146,7 @@ public class SPAdminServiceImpl implements SPAdminService {
     @Override
     public IPage SelectAdmin(Integer page, Integer size, String token){
         if(!token.equals(null)){
-            Page<Admin> adminpage = new Page<>(page*size,size);
+            Page<Admin> adminpage = new Page<>((page-1)*size,size);
             IPage adminipage = adminMapper.selectPage(adminpage,null);
             return adminipage;
         }else
@@ -156,7 +156,7 @@ public class SPAdminServiceImpl implements SPAdminService {
     //查询普通用户
     public IPage SelectUser(Integer page, Integer size, String token){
         if(!token.equals(null)){
-            Page<User> userpage = new Page<>(page*size,size);
+            Page<User> userpage = new Page<>((page-1)*size,size);
             IPage useripage = userMapper.selectPage(userpage,null);
             return useripage;
         }else
@@ -166,7 +166,7 @@ public class SPAdminServiceImpl implements SPAdminService {
     //查询赛事选手
     public IPage SelectPlayer(Integer page, Integer size, String token){
         if(!token.equals(null)){
-            Page<Player> playerpage = new Page<>(page*size,size);
+            Page<Player> playerpage = new Page<>((page-1)*size,size);
             IPage playeripage = playerMapper.selectPage(playerpage,null);
             return playeripage;
         }else
@@ -185,5 +185,7 @@ public class SPAdminServiceImpl implements SPAdminService {
         spAdminMapper.updateById(spadmin);
         return true;
     }
+
+
 
 }

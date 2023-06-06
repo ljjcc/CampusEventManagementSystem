@@ -4,8 +4,6 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import net.sf.jsqlparser.expression.DateTimeLiteralExpression;
-import org.joda.time.DateTime;
 
 @TableName("tb_notice")
 public class Notice {
@@ -27,6 +25,9 @@ public class Notice {
         Time = time;
         Sendto = sendto;
         this.UAccount = UAccount;
+    }
+
+    public Notice() {
     }
 
     public Integer getId() {
