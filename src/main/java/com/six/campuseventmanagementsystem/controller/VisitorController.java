@@ -19,4 +19,9 @@ public class VisitorController {
     public Integer Submit(String Password, String Account, String UserName, String Sex, String Nation, String birthday, String DocumentType, String DocumentNumber, String Unit, String Number, String Origin, String MAddress, String UserType){
         return visitorService.Submit(Password, Account, UserName, Sex, Nation, birthday, DocumentType, DocumentNumber, Unit, Number, Origin, MAddress, UserType);
     }
+
+    @DeleteMapping("DeleteById")
+    public Integer DeleteById(Integer ID){
+        return visitorService.DeleteById(ID);
+    }
 }

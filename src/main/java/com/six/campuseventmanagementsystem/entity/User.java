@@ -4,12 +4,17 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.annotations.ApiModel;
 import net.sf.jsqlparser.expression.DateTimeLiteralExpression;
 import org.joda.time.DateTime;
 import sun.security.util.Password;
 
 import java.sql.Date;
 
+/**
+ * 实体类
+ */
+@ApiModel(value = "普通用户实体类",description = "普通用户个人信息，对应数据库中的tb_user表")
 @TableName("tb_user")
 public class User {
     @TableField("username")

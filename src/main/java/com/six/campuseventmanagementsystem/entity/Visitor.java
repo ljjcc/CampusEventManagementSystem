@@ -4,7 +4,12 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.annotations.ApiModel;
 
+/**
+ * 实体类
+ */
+@ApiModel(value = "游客实体类",description = "游客个人信息，对应数据库中的tb_visitor表")
 @TableName("tb_visitor")
 public class Visitor {
     @TableId(type = IdType.AUTO)

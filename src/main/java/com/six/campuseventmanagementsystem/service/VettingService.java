@@ -50,4 +50,10 @@ public interface VettingService {
      * @return 返回更新记录数
      */
     Integer BuildByMatchId(Integer MatchId, String Account, String VettingType, String VettingAction);
+
+    /**
+     * 赞助商发送消息给超级管理员和管理员
+     */
+    Integer sendNoticeToAdmin(String Type,String Message,String Sendto,String Account,Integer Matchid,String State);
+
 }

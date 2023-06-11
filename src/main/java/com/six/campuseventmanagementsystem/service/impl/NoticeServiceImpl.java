@@ -8,8 +8,8 @@ import com.six.campuseventmanagementsystem.entity.Match;
 import com.six.campuseventmanagementsystem.mapper.MatchMapper;
 import com.six.campuseventmanagementsystem.mapper.NoticeMapper;
 import com.six.campuseventmanagementsystem.service.NoticeService;
+import com.six.campuseventmanagementsystem.service.TimeService;
 import com.six.campuseventmanagementsystem.verify.StrNotice;
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +20,8 @@ public class NoticeServiceImpl implements NoticeService {
     private NoticeMapper noticeMapper;
     @Autowired
     private MatchMapper matchMapper;
+    @Autowired
+    private TimeService timeService;
 
     /**
      * 根据消息的 发送对象和用户账号 创建消息
@@ -29,8 +31,9 @@ public class NoticeServiceImpl implements NoticeService {
     public Integer BulidUserNotice(String Sendto, String Account, String NoticeType, String NoticeAction){
         Integer result;
         StrNotice strNotice = new StrNotice();
-        DateTime dateTime = new DateTime();
-        String Time = dateTime.toString("yyyy-MM-dd hh:mm:ss");
+//        DateTime dateTime = new DateTime();
+//        String Time = dateTime.toString("yyyy-MM-dd hh:mm:ss");
+        String Time=timeService.getPresentlyTime();
         Notice notice = new Notice(Account+strNotice.Type(NoticeType, NoticeAction), Account+strNotice.Message(NoticeType, NoticeAction), Time, Sendto, Account);
         result = noticeMapper.insert(notice);
         return result;
@@ -45,8 +48,9 @@ public class NoticeServiceImpl implements NoticeService {
     public Integer BulidMatchNotice(Integer MatchId, String Sendto, String Account, String NoticeType, String NoticeAction){
         Integer result;
         StrNotice strNotice = new StrNotice();
-        DateTime dateTime = new DateTime();
-        String Time = dateTime.toString("yyyy-MM-dd hh:mm:ss");
+//        DateTime dateTime = new DateTime();
+//        String Time = dateTime.toString("yyyy-MM-dd hh:mm:ss");
+        String Time=timeService.getPresentlyTime();
         QueryWrapper<Match> matchQueryWrapper = new QueryWrapper<>();
         matchQueryWrapper.eq("id", MatchId);
         Match match = matchMapper.selectOne(matchQueryWrapper);
@@ -88,9 +92,33 @@ public class NoticeServiceImpl implements NoticeService {
                 noticeQueryWrapper.eq("AAcount", Account);
                 IPage noticeipage = noticeMapper.selectPage(noticepage,noticeQueryWrapper);
                 return noticeipage;
-            }else
+            }else {
                 return null;
-        }else
+            }
+        }else {
             return null;
+        }
+    }
+
+    /**
+     * 赞助商发送消息给自己
+     */
+
+    @Override
+    public Integer sendNoticeToSelf(String Type, String Message, String Sendto, String UAccount,String AAccount,String State) {
+//        获取当前时间
+        String Time=timeService.getPresentlyTime();
+//        自动生成消息ID
+        int ID=noticeMapper.selectMaxId()+1;
+        Notice notice=new Notice();
+        notice.setId(ID);
+        notice.setType(Type);
+        notice.setMessage(Message);
+        notice.setTime(Time);
+        notice.setSendto(Sendto);
+        notice.setUAccount(UAccount);
+        notice.setAAccount(AAccount);
+        notice.setState(State);
+        return noticeMapper.insert(notice);
     }
 }

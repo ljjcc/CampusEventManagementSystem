@@ -1,6 +1,9 @@
 package com.six.campuseventmanagementsystem.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.six.campuseventmanagementsystem.entity.Admin;
 import com.six.campuseventmanagementsystem.entity.Match;
 import com.six.campuseventmanagementsystem.entity.Vetting;
 import com.six.campuseventmanagementsystem.mapper.MatchMapper;
@@ -39,6 +42,42 @@ public class MatchServiceImpl implements MatchService {
         return result;
     }
 
+    /**
+     * 根据 ID 删除赛事信息
+     * @return 返回更新记录数
+     */
+    @Override
+    public Integer DeleteById(Integer ID){
+        Integer result = matchMapper.deleteById(ID);
+        return result;
+    }
+
+    /**
+     * 查找所有赛事信息
+     * @return 返回更新记录数
+     */
+    @Override
+    public IPage SelectAll(Integer page, Integer size, String token){
+        if(!token.equals(null)){
+            Page<Match> matchpage = new Page<>((page-1)*size,size);
+            IPage matchipage = matchMapper.selectPage(matchpage,null);
+            return matchipage;
+        }else
+            return null;
+    }
+
+    /**
+     * 根据ID更改比赛信息
+     * @return 返回更新记录数
+     */
+    @Override
+    public Integer UpdateById(String unit, Integer id, String unitAddress, String type,
+                       String items, String matchTime, String place, String number,
+                       String documentNumber, String state){
+        Match match = new Match(unit, id, unitAddress, type, items, matchTime, place, number, documentNumber, state);
+        Integer result = matchMapper.updateById(match);
+        return result;
+    }
 
 
 }

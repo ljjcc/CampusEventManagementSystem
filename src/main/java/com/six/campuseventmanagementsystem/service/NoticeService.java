@@ -26,4 +26,11 @@ public interface NoticeService {
      * @return 返回IPage类型消息记录
      */
     IPage SelectByAccount(String UserType, String Account, Integer page, Integer size, String token);
+
+    /**
+     * 赞助商发送消息给自己
+     */
+    Integer sendNoticeToSelf(String Type,String Message,String Sendto,String UAccount,String AAccount,String State);
+
+
 }

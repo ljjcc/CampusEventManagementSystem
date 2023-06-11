@@ -44,6 +44,7 @@ public class SPAdminController {
     public Boolean Enable(Integer ID, String UserType){
         return spAdminService.Enable(ID, UserType);
     }
+
     //查询普通管理员
     @PostMapping("/SelectAdmin")
     public IPage SelectAdmin(Integer page, Integer size, String token){

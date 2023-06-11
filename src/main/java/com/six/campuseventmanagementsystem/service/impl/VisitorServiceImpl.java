@@ -39,34 +39,37 @@ public class VisitorServiceImpl implements VisitorService {
 
     //游客提交申请成为主办方/赞助商的审核
     @Override
-    public Integer Submit(String Password, String Account, String UserName, String Sex, String Nation, String birthday, String DocumentType, String DocumentNumber, String Unit, String Number, String Origin, String MAddress, String UserType){
+    public Integer Submit(String Password, String Account, String UserName, String Sex, String Nation, String birthday, String DocumentType, String DocumentNumber, String Unit, String Number, String Origin, String MAddress, String UserType) {
         Integer result;
         User user = new User(Password, Account, UserName, Sex, Nation, birthday, DocumentType, DocumentNumber, MAddress, Unit, Number, Origin, UserType);
         user.setState("N");
         QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
         userQueryWrapper.eq("Account", Account);
-        User selectuser =userMapper.selectOne(userQueryWrapper);
-        if(selectuser == null){
+        User selectuser = userMapper.selectOne(userQueryWrapper);
+        if (selectuser == null) {
             userMapper.insert(user);
-            if(UserType.equals("赞助商 ")){
-                result = vettingService.BuildAllVetting(Account,"RealName","zzs")+
-                         noticeService.BulidUserNotice(UserType, Account, "RealName", "zzs");
+            if (UserType.equals("赞助商 ")) {
+                result = vettingService.BuildAllVetting(Account, "RealName", "zzs") +
+                        noticeService.BulidUserNotice(UserType, Account, "RealName", "zzs");
                 return result;
-            }
-            else if(UserType.equals("主办方")){
-                result = vettingService.BuildAllVetting(Account, "RealName", "zbf")+
-                         noticeService.BulidUserNotice(UserType, Account, "RealName", "zbf");
+            } else if (UserType.equals("主办方")) {
+                result = vettingService.BuildAllVetting(Account, "RealName", "zbf") +
+                        noticeService.BulidUserNotice(UserType, Account, "RealName", "zbf");
                 return result;
-            }else
+            } else
                 return null;
 
-        }else
+        } else
             return null;
     }
 
-//实名验证，申请成为 主办方or赞助商
-//    @Override
-//    public String RealName(String UserName, String Sex, String Nation,String birthday, String DocumentType, String DocumentNumber, String Unit, String Number, String Origin, String MAddress, String UserType){
-//      return null;
-//    };
+    //根据ID删除visitor
+    @Override
+    public Integer DeleteById(Integer ID){
+        Integer result = vettingMapper.deleteById(ID);
+        return result;
+    }
 }
+
+
+

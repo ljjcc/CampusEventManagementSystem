@@ -5,12 +5,18 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.annotations.ApiModel;
+
+/**
+ * 实体类
+ */
 
 /**
  * @author ljc
  * Unit单位, id比赛id,UnitAddress单位地址,Type类型,Items事项,MatchTime起始时间,Place地点,Number手机号码,DocumentNumber身份证号码,State审核状态;
  */
 
+@ApiModel(value = "赛事信息实体类",description = "赛事信息，对应数据库中的tb_match表")
 @TableName("tb_match")
 public class Match {
 
@@ -41,6 +47,20 @@ public class Match {
         Number = number;
         DocumentNumber = documentNumber;
         Account = account;
+    }
+
+    public Match(String unit, Integer id, String unitAddress, String type, String items, String matchTime,
+                 String place, String number, String documentNumber, String state) {
+        Unit = unit;
+        this.id = id;
+        UnitAddress = unitAddress;
+        Type = type;
+        Items = items;
+        MatchTime = matchTime;
+        Place = place;
+        Number = number;
+        DocumentNumber = documentNumber;
+        State = state;
     }
 
     public Match() {

@@ -4,8 +4,13 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.annotations.ApiModel;
 import org.joda.time.DateTime;
 
+/**
+ * 实体类
+ */
+@ApiModel(value = "审核信息实体类",description = "普通用户和游客提交的审核信息，对应数据库中的tb_vetting表")
 @TableName("tb_vetting")
 public class Vetting {
     @TableId(type = IdType.AUTO)

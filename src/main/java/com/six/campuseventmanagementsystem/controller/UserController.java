@@ -18,10 +18,25 @@ public class UserController {
     @Autowired
     private MatchService matchService;
 
-    //修改用户权限
+    //超级管理员修改用户权限
+    @PutMapping("/SPUpUserType")
+    public Integer SPUpUserType(Integer ID,String UserType){
+        return userService.SPUpdateUserType(ID,UserType);
+    }
+
+    //管理员修改用户权限
     @PutMapping("/UpUserType")
-    public Boolean UpUserType(Integer ID,String UserType){
+    public Integer UpUserType(Integer ID,String UserType){
         return userService.UpdateUserType(ID,UserType);
+    }
+
+    /**
+     * 根据User的ID删除 普通用户
+     * @return 返回数据更改条数
+     */
+    @DeleteMapping("/DeleteById")
+    public Integer DeleteById(Integer ID){
+        return userService.DeleteById(ID);
     }
 
     /**

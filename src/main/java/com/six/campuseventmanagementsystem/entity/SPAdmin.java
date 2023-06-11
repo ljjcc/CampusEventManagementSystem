@@ -4,7 +4,12 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.annotations.ApiModel;
 
+/**
+ * 实体类
+ */
+@ApiModel(value = "超级管理员实体类",description = "超级管理员个人信息，对应数据库中的tb_spadmin表")
 @TableName("tb_spadmin")
 public class SPAdmin {
 

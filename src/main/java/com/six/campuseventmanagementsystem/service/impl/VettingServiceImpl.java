@@ -12,9 +12,9 @@ import com.six.campuseventmanagementsystem.mapper.UserMapper;
 import com.six.campuseventmanagementsystem.mapper.VettingMapper;
 import com.six.campuseventmanagementsystem.mapper.VisitorMapper;
 import com.six.campuseventmanagementsystem.service.NoticeService;
+import com.six.campuseventmanagementsystem.service.TimeService;
 import com.six.campuseventmanagementsystem.service.VettingService;
 import com.six.campuseventmanagementsystem.verify.StrVetting;
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +31,8 @@ public class VettingServiceImpl implements VettingService {
     private MatchMapper matchMapper;
     @Autowired
     private NoticeService noticeService;
+    @Autowired
+    private TimeService timeService;
 
     /**
      * 根据审核类型和审核内容来生成审核消息  发给所有类型管理员
@@ -40,8 +42,9 @@ public class VettingServiceImpl implements VettingService {
     public Integer BuildAllVetting(String Account, String VettingType, String VettingAction){
         Integer result;
         StrVetting strVetting = new StrVetting();
-        DateTime dateTime = new DateTime();
-        String Time = dateTime.toString("yyyy-MM-dd hh:mm:ss");
+//        DateTime dateTime = new DateTime();
+//        String Time = dateTime.toString("yyyy-MM-dd hh:mm:ss");
+        String Time=timeService.getPresentlyTime();
         Vetting avetting = new Vetting(Account+strVetting.Type(VettingType, VettingAction), Account+strVetting.Message(VettingType, VettingAction), Time, "管理员", Account);
         Vetting svetting = new Vetting(Account+strVetting.Type(VettingType, VettingAction), Account+strVetting.Message(VettingType, VettingAction), Time, "超级管理员", Account);
         result = vettingMapper.insert(avetting)+vettingMapper.insert(svetting);
@@ -52,11 +55,13 @@ public class VettingServiceImpl implements VettingService {
      * 根据审核类型和审核内容来生成审核消息  只发给普通管理员
      * @return 返回更新记录数
      */
+    @Override
     public Integer BuildAdminVetting(String Account, String VettingType, String VettingAction){
         Integer result;
         StrVetting strVetting = new StrVetting();
-        DateTime dateTime = new DateTime();
-        String Time = dateTime.toString("yyyy-MM-dd hh:mm:ss");
+//        DateTime dateTime = new DateTime();
+//        String Time = dateTime.toString("yyyy-MM-dd hh:mm:ss");
+        String Time=timeService.getPresentlyTime();
         Vetting avetting = new Vetting(Account+strVetting.Type(VettingType, VettingAction), Account+strVetting.Message(VettingType, VettingAction), Time, "管理员", Account);
         result = vettingMapper.insert(avetting);
         return result;
@@ -88,8 +93,9 @@ public class VettingServiceImpl implements VettingService {
             vettingQueryWrapper.eq("Sendto", UserType);
             IPage vettingipage = vettingMapper.selectPage(vettingpage,vettingQueryWrapper);
             return vettingipage;
-        }else
+        }else {
             return null;
+        }
 
     }
 
@@ -123,8 +129,9 @@ public class VettingServiceImpl implements VettingService {
             else if(usertype.getUserType().equals("主办方")){
                 result += noticeService.BulidUserNotice(usertype.getUserType(), Account, "RealName", "zbf") + vettingMapper.update(vetting,vettingQueryWrapper);
                 return result;
-            }else
+            }else {
                 return null;
+            }
 
         }
         else if(State.equals("N")){
@@ -132,8 +139,9 @@ public class VettingServiceImpl implements VettingService {
             result = userMapper.delete(userQueryWrapper);
             result += noticeService.BulidUserNotice(visitor.getUserType(), Account, "RealName", "fail") + vettingMapper.update(vetting,vettingQueryWrapper);
             return result;
-        }else
+        }else {
             return null;
+        }
     }
 
 
@@ -158,8 +166,9 @@ public class VettingServiceImpl implements VettingService {
         }else if(State.equals("N")){
             result += noticeService.BulidMatchNotice(MatchId,"主办方",Account,"Match", "fail");
             return result;
-        }else
+        }else {
             return null;
+        }
     }
 
 
@@ -171,8 +180,9 @@ public class VettingServiceImpl implements VettingService {
     public Integer BuildByMatchId(Integer MatchId, String Account, String VettingType, String VettingAction){
         Integer result;
         StrVetting strVetting = new StrVetting();
-        DateTime dateTime = new DateTime();
-        String Time = dateTime.toString("yyyy-MM-dd hh:mm:ss");
+//        DateTime dateTime = new DateTime();
+//        String Time = dateTime.toString("yyyy-MM-dd hh:mm:ss");
+        String Time=timeService.getPresentlyTime();
         QueryWrapper<Match> matchQueryWrapper = new QueryWrapper<>();
         matchQueryWrapper.eq("id", MatchId);
         Match match = matchMapper.selectOne(matchQueryWrapper);
@@ -182,4 +192,27 @@ public class VettingServiceImpl implements VettingService {
         result = vettingMapper.insert(pvetting) + vettingMapper.insert(cvetting);
         return result;
     }
+
+    /**
+     * 赞助商发送消息给超级管理员
+     */
+
+    @Override
+    public Integer sendNoticeToAdmin(String Type, String Message, String Sendto, String Account, Integer Matchid, String State) {
+        //        获取当前时间
+        String Time=timeService.getPresentlyTime();
+//        自动生成消息ID
+        int ID=vettingMapper.selectMaxId()+1;
+        Vetting vetting=new Vetting();
+        vetting.setId(ID);
+        vetting.setType(Type);
+        vetting.setMessage(Message);
+        vetting.setTime(Time);
+        vetting.setSendto(Sendto);
+        vetting.setAccount(Account);
+        vetting.setMatchid(Matchid);
+        vetting.setState(State);
+        return vettingMapper.insert(vetting);
+    }
+
 }

@@ -23,12 +23,37 @@ public class UserServiceImpl implements UserService {
 
     //更新类别
     @Override
-    public Boolean UpdateUserType(Integer ID,String UserType) {
-        User user = new User();
-        user.setID(ID);
-        user.setUserType(UserType);
-        userMapper.updateById(user);
-        return true;
+    public Integer SPUpdateUserType(Integer ID,String UserType) {
+        Integer result;
+        if(UserType.equals("管理员")||UserType.equals("赞助商")||UserType.equals("主办方")){
+            User user = new User();
+            user.setID(ID);
+            user.setUserType(UserType);
+            result = userMapper.updateById(user);
+            return result;
+        }else
+            return null;
+    }
+
+    //普通管理员更新用户权限
+    @Override
+    public Integer UpdateUserType(Integer ID,String UserType) {
+        Integer result;
+        if(UserType.equals("主办方")||!UserType.equals("赞助商")){
+            User user = new User();
+            user.setID(ID);
+            user.setUserType(UserType);
+            result = userMapper.updateById(user);
+            return result;
+        }else
+            return null;
+    }
+
+    //删除普通用户
+    @Override
+    public Integer DeleteById(Integer ID) {
+        Integer result = userMapper.deleteById(ID);
+        return result;
     }
 
     /**

@@ -13,4 +13,14 @@ public interface VisitorService {
      */
     Integer Submit(String Password, String Account, String UserName, String Sex, String Nation, String birthday, String DocumentType, String DocumentNumber, String Unit, String Number, String Origin, String MAddress, String UserType);
 //    String RealName(String UserName, String Sex, String Nation, String birthday, String DocumentType, String DocumentNumber, String Unit, String Number, String Origin, String MAddress, String UserType);
+
+
+    /**
+     * 根据Visitor的ID删除 游客
+     * @return 返回更改条数
+     */
+    Integer DeleteById(Integer ID);
+
+
 }
+
