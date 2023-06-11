@@ -26,6 +26,8 @@ mybatis-plus:
     restart:
       enabled: true
       additional-paths: src/main/java
+
+
 #  redis缓存配置
 #  redis:
 #    host: localhost
