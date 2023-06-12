@@ -2,8 +2,9 @@ package com.six.campuseventmanagementsystem.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.six.campuseventmanagementsystem.entity.Admin;
-
-import java.util.List;
+import com.six.campuseventmanagementsystem.entity.Player;
+import com.six.campuseventmanagementsystem.entity.SPAdmin;
+import com.six.campuseventmanagementsystem.entity.User;
 
 public interface SPAdminService {
     //添加管理员
@@ -17,19 +18,25 @@ public interface SPAdminService {
     //注销普通用户
     Boolean LogoutUser(Integer ID, String UserType);
     //启用管理员
-    public Boolean EnableAdmin(Integer ID);
+    Boolean EnableAdmin(Integer ID);
     //启用普通用户
-    public Boolean EnableUser(Integer ID, String UserType);
+    Boolean EnableUser(Integer ID, String UserType);
     //注销
     Boolean Logout(Integer ID, String UserType);
     //启用
     Boolean Enable(Integer ID, String UserType);
     //查询管理员
-    IPage SelectAdmin(Integer page, Integer size, String token);
+    IPage<Admin> SelectAdmin(Integer page, Integer size, String token);
     //查询普通用户
-    IPage SelectUser(Integer page, Integer size, String token);
+    IPage<User> SelectUser(Integer page, Integer size, String token);
     //查询赛事选手
-    public IPage SelectPlayer(Integer page, Integer size, String token);
+    IPage<Player> SelectPlayer(Integer page, Integer size, String token);
     //修改超级管理员
     Boolean UpdateSPAdmin(Integer ID,String SPAdminName,String Account,String Password,String OldType,String NewType);
+
+    /**
+     * 根据SPAdmin的Account查找SPAdmin  个人信息
+     * @return 返回IPage类型的SPAdmin信息
+     */
+    IPage<SPAdmin> SelectByAccount(String Account, String token);
 }

@@ -66,6 +66,25 @@ public class UserController {
         return matchService.BuildMatch(Unit, UnitAddress, Type, Items, MatchTime, Place, Number, DocumentNumber, Account);
     }
 
+    /**
+     * 根据User的Account查找User  个人信息
+     * @return 返回IPage类型的User信息
+     */
+    @PostMapping("/SeleteByAccount")
+    public IPage SeleteByAccount(String Account, String token){
+        return userService.SelectByAccount(Account, token);
+    }
+
+    /**
+     * 根据User的ID修改  个人信息
+     * @return 返回更改数据条数
+     */
+    @PutMapping("/UpdateById")
+    public Integer UpdateById(String userName, String sex, Integer id,String unit, String address,
+                       String age, String number,  String origin){
+        return userService.UpdateById(userName, sex, id, unit, address, age, number, origin);
+    }
+
 }
 
 

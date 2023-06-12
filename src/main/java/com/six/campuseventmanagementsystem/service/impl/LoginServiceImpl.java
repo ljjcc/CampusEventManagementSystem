@@ -1,12 +1,12 @@
 package com.six.campuseventmanagementsystem.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.six.campuseventmanagementsystem.entity.*;
-import com.six.campuseventmanagementsystem.mapper.AdminMapper;
-import com.six.campuseventmanagementsystem.mapper.SPAdminMapper;
-import com.six.campuseventmanagementsystem.mapper.UserMapper;
-import com.six.campuseventmanagementsystem.mapper.VisitorMapper;
+import com.six.campuseventmanagementsystem.mapper.*;
 import com.six.campuseventmanagementsystem.service.LoginService;
+import com.six.campuseventmanagementsystem.service.TimeService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,13 +25,19 @@ public class LoginServiceImpl implements LoginService {
     private AdminMapper adminMapper;
     @Autowired
     private VisitorMapper visitorMapper;
+
+    @Autowired
+    private HistoryMapper historyMapper;
+
+    @Autowired
+    private TimeService timeService;
     //1天过期
     private static int expire = 86400;
     //32位密钥
     private static String secret = "abcdfghiabcdfghiabcdfghiabcdfghi";
 
     @Override
-    public String verify(String Account, String Password){
+    public String verify(String Account, String Password, String how, String ip){
         QueryWrapper<User> UqueryWrapper = new QueryWrapper<>();
         QueryWrapper<Admin> AqueryWrapper = new QueryWrapper<>();
         QueryWrapper<SPAdmin> SqueryWrapper = new QueryWrapper<>();
@@ -40,12 +46,14 @@ public class LoginServiceImpl implements LoginService {
         AqueryWrapper.eq("Account",Account).eq("Password",Password);
         SqueryWrapper.eq("Account",Account).eq("Password",Password);
         VqueryWrapper.eq("Account", Account).eq("Password", Password);
+        History history = new History(Account, how, ip, timeService.getPresentlyTime());
         User user = userMapper.selectOne(UqueryWrapper);
         Admin admin = adminMapper.selectOne(AqueryWrapper);
         SPAdmin spAdmin = spAdminMapper.selectOne(SqueryWrapper);
         Visitor visitor = visitorMapper.selectOne(VqueryWrapper);
-        if(user != null&&user.getUserType().equals("Y")){
+        if(user != null&&user.getState().equals("Y")){
             if(user.getUserType().equals("主办方")){
+                historyMapper.insert(history);
                 generateToken("主办方");
                 String organizer = "{\n" +
                         "  \"code\": 20000,\n" +
@@ -87,6 +95,7 @@ public class LoginServiceImpl implements LoginService {
                 return organizer;
             }
             else if(user.getUserType().equals("赞助商")){
+                historyMapper.insert(history);
                 String sponsor = "{\n" +
                         "  \"code\": 20000,\n" +
                         "  \"data\": {\n" +
@@ -129,7 +138,8 @@ public class LoginServiceImpl implements LoginService {
             else
                 return null;
         }
-        else if(admin != null&&admin.getUserType().equals("Y")){
+        else if(admin != null&&admin.getState().equals("Y")){
+            historyMapper.insert(history);
             String ad = "{\n" +
                     "  \"code\": 20000,\n" +
                     "  \"data\": {\n" +
@@ -212,6 +222,7 @@ public class LoginServiceImpl implements LoginService {
             return ad;
         }
         else if(visitor != null){
+            historyMapper.insert(history);
             String organizer = "{\n" +
                     "  \"code\": 20000,\n" +
                     "  \"data\": {\n" +
@@ -252,6 +263,7 @@ public class LoginServiceImpl implements LoginService {
             return organizer;
         }
         else if(spAdmin != null) {
+            historyMapper.insert(history);
             String spad = "{\n" +
                     "  \"code\": 20000,\n" +
                     "  \"data\": {\n" +
@@ -383,6 +395,22 @@ public class LoginServiceImpl implements LoginService {
                 .setSigningKey(secret)
                 .parseClaimsJws(token)
                 .getBody().getSubject();
+    }
+
+    /**
+     * 根据 用户账号 查找登陆记录
+     * @return 返回IPage类型消息记录
+     */
+    @Override
+    public IPage<History> SeleteByAccount(String Account, Integer page, Integer size, String token){
+        if(!token.equals(null)){
+            Page<History> historypage = new Page<>((page-1)*size, size);
+            QueryWrapper<History> historyQueryWrapper = new QueryWrapper<>();
+            historyQueryWrapper.eq("Account", Account);
+            IPage historyipage = historyMapper.selectPage(historypage,historyQueryWrapper);
+            return historyipage;
+        }else
+            return null;
     }
 
 

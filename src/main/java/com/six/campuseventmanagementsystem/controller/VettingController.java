@@ -1,5 +1,6 @@
 package com.six.campuseventmanagementsystem.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.six.campuseventmanagementsystem.mapper.MatchMapper;
 import com.six.campuseventmanagementsystem.service.MatchService;
 import com.six.campuseventmanagementsystem.service.VettingService;
@@ -29,8 +30,14 @@ public class VettingController {
     }
 
     //删除审核消息
-    @PostMapping("/DeleteById")
+    @DeleteMapping("/DeleteById")
     public Integer DeleteById(Integer id){
         return vettingService.DeleteById(id);
+    }
+
+    //根据用户类型（超级管理员 or 管理员）查询审核消息
+    @PostMapping("/SeleteByUserType")
+    public IPage SelectByUserType(String UserType, Integer page, Integer size, String token){
+        return vettingService.SelectByUserType(UserType, page, size, token);
     }
 }

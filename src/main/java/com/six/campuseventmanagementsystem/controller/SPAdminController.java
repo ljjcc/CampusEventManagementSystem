@@ -45,6 +45,12 @@ public class SPAdminController {
         return spAdminService.Enable(ID, UserType);
     }
 
+    //查询超级管理员个人信息
+    @PostMapping("/SeleteByAccount")
+    public IPage SeleteByAccount(String Account, String token){
+        return spAdminService.SelectByAccount(Account, token);
+    }
+
     //查询普通管理员
     @PostMapping("/SelectAdmin")
     public IPage SelectAdmin(Integer page, Integer size, String token){

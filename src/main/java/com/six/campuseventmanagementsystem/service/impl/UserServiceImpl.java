@@ -21,7 +21,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private NoticeMapper noticeMapper;
 
-    //更新类别
+    //超级管理员更改用户权限
     @Override
     public Integer SPUpdateUserType(Integer ID,String UserType) {
         Integer result;
@@ -86,5 +86,33 @@ public class UserServiceImpl implements UserService {
             return noticeipage;
         }else
             return null;
+    }
+
+    /**
+     * 根据User的Account查找User  个人信息
+     * @return 返回IPage类型的User信息
+     */
+    @Override
+    public IPage SelectByAccount(String Account,String token){
+        if(!token.equals(null)){
+            Page<User> userpage = new Page<>(1, 1);
+            QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
+            userQueryWrapper.eq("AAccount", Account);
+            IPage useripage = userMapper.selectPage(userpage,userQueryWrapper);
+            return useripage;
+        }else
+            return null;
+    }
+
+    /**
+     * 根据User的ID修改  个人信息
+     * @return 返回更改数据条数
+     */
+    @Override
+    public Integer UpdateById(String userName, String sex, Integer id,String unit, String address,
+                       String age, String number,  String origin){
+        User user = new User(userName, sex, id, unit, address, age, number, origin);
+        Integer result = userMapper.updateById(user);
+        return result;
     }
 }

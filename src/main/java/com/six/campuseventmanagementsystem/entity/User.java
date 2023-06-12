@@ -73,6 +73,18 @@ public class User {
         UserType = userType;
     }
 
+    public User(String userName, String sex, Integer id,String unit, String address,
+                String age, String number,  String origin) {
+        UserName = userName;
+        Sex = sex;
+        this.id = id;
+        Unit = unit;
+        Address = address;
+        Age = age;
+        Number = number;
+        Origin = origin;
+    }
+
     public String getUserName() {
         return UserName;
     }

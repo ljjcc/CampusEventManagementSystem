@@ -88,11 +88,14 @@ public class VettingServiceImpl implements VettingService {
     @Override
     public IPage SelectByUserType(String UserType, Integer page, Integer size, String token){
         if(!token.equals(null)){
-            Page<Vetting> vettingpage = new Page<>((page-1)*size,size);
-            QueryWrapper<Vetting> vettingQueryWrapper = new QueryWrapper<>();
-            vettingQueryWrapper.eq("Sendto", UserType);
-            IPage vettingipage = vettingMapper.selectPage(vettingpage,vettingQueryWrapper);
-            return vettingipage;
+            if(UserType.equals("管理员")||UserType.equals("超级管理员")){
+                Page<Vetting> vettingpage = new Page<>((page-1)*size,size);
+                QueryWrapper<Vetting> vettingQueryWrapper = new QueryWrapper<>();
+                vettingQueryWrapper.eq("Sendto", UserType);
+                IPage vettingipage = vettingMapper.selectPage(vettingpage,vettingQueryWrapper);
+                return vettingipage;
+            }else
+                return null;
         }else {
             return null;
         }

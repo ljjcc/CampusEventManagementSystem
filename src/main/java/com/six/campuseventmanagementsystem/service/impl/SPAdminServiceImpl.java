@@ -186,6 +186,22 @@ public class SPAdminServiceImpl implements SPAdminService {
         return true;
     }
 
+    /**
+     * 根据SPAdmin的Account查找SPAdmin  个人信息
+     * @return 返回IPage类型的SPAdmin信息
+     */
+    @Override
+    public IPage SelectByAccount(String Account,String token){
+        if(!token.equals(null)){
+            Page<SPAdmin> spadminpage = new Page<>(1, 1);
+            QueryWrapper<SPAdmin> spadminQueryWrapper = new QueryWrapper<>();
+            spadminQueryWrapper.eq("AAccount", Account);
+            IPage spadminipage = spAdminMapper.selectPage(spadminpage,spadminQueryWrapper);
+            return spadminipage;
+        }else
+            return null;
+    }
+
 
 
 }
