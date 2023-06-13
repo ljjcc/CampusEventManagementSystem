@@ -1,16 +1,13 @@
 package com.six.campuseventmanagementsystem.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.six.campuseventmanagementsystem.entity.Ads;
+
+import com.six.campuseventmanagementsystem.entity.Prize;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
-
-/**
- * @author 欣欣
- */
 @Mapper
-public interface AdsMapper extends BaseMapper<Ads> {
-    @Select("SELECT MAX(adsID) FROM tb_ads")
-    Integer selectMaxadsID();
+public interface PrizeMapper extends BaseMapper<Prize> {
+    @Select("SELECT MAX(id) FROM tb_prize")
+    Integer selectMaxprizeID();
 }

@@ -39,7 +39,7 @@ public class SPAdminServiceImpl implements SPAdminService {
         return true;
     }
 
-    //授权管理员
+    //更改管理员信息
     @Override
     public Boolean UpdateAdmin(Integer ID,String AdminName, String Account, String Password, String UserType) {
         Admin admin = new Admin();
